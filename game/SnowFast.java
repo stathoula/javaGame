@@ -42,7 +42,7 @@ public class SnowFast extends GameObject {
         x += velX;
 		y += velY;
 
-        //if the snowflake reach the bottom of the window it show us again on the top
+        //if the snowflake reach the bottom of the window it goes back to the top
 	    if (y >= Game.HEIGHT ) {
             y = 0;
             x = (int) (Game.WIDTH * Math.random());

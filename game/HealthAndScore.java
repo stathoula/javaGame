@@ -40,7 +40,6 @@ public class HealthAndScore {
         //check if user has lost so as to upload the score
 		if (!lost)
 		     score++;
-
 	}
 
 	/**

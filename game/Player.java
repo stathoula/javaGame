@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 import java.awt.Rectangle;
+import java.awt.Font;
 
 /**
  * A class that animates an Rectangle on the canvas which represent the player.
@@ -16,6 +17,9 @@ public class Player extends GameObject {
 	Random r = new Random();
 	/** var type of Handler*/
 	Handler handler;
+	/** keep the time that the game run*/
+	private int time = 0;
+    HealthAndScore healthAndScore = new HealthAndScore();
      /**
      * Creates a rectangle at a specific position
      *
@@ -40,12 +44,13 @@ public class Player extends GameObject {
 	public void tick() {
 		x += velX;
 		y += velY;
+		time++;
 
-        //it helps so as to dont loose the player from the window
+        //it helps so as player not to go out of the bounds of the window
 		x = Game.clamp(x, 0, Game.WIDTH - 37);
 		y = Game.clamp(y, 0, Game.HEIGHT - 60);
 
-        //see if the player crash with the snowflake
+        //check if the player crash with the snowflake
 		collision();
 	}
 
@@ -56,13 +61,15 @@ public class Player extends GameObject {
 	private void collision() {
 		for (int i = 0; i < handler.object.size(); i++) {
 			GameObject tempObject = handler.object.get(i);
-            //if it crash with a snowflake-id it looses life
+            //if player crash with a snowflake-id the health will decrease
 			if (tempObject.getId() == ID.SnowFast) {
-				if (getBounds().intersects(tempObject.getBounds())) {
+				// we check if the player collide with the snowflake
+				//we also want player to lose health after the first 80 milliseconds
+				if (getBounds().intersects(tempObject.getBounds()) && time >= 80) {
 					HealthAndScore.HEALTH -= 0.0001;
 				}
 			}
-			//if it crash with a lifeup-id it get life
+			//if player crash with a lifeup-id, health will increase
 			if(tempObject.getId() == ID.LifeUp) {
 				if(getBounds().intersects(tempObject.getBounds())) {
 					HealthAndScore.HEALTH += 12;
@@ -83,6 +90,26 @@ public class Player extends GameObject {
 		g.fillRect(x, y, 27, 27);
 		g.setColor(Color.white);
 		g.drawRect(x, y, 27, 27);
+
+        //start countdown
+		if (time >= 0 && time <= 20) {
+		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 30));
+			g.drawString("3", 280, 180);
+		}
+		if (time >= 21 && time <= 40) {
+		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 30));
+			g.drawString("2", 280, 180);
+		}
+		if (time >= 41 && time <= 69) {
+		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 30));
+			g.drawString("1", 280, 180);
+		}
+        //indication that the game has started and player loses health after this indication
+		if (time >= 70 && time <= 120) {
+		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 30));
+			g.drawString("Start", 280, 180);
+		}
+
 	}
 
 }
