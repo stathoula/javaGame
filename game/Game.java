@@ -77,7 +77,7 @@ public class Game extends Canvas implements Runnable {
 	}
    /**Run the game*/
 	public void run() {
-		this.requestFocus();//you dont need to click on the window so as to start with this command
+		this.requestFocus();// with this command , you dont need to click on the window so as to start moving the player
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;

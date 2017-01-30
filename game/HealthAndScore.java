@@ -5,6 +5,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Random;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.io.BufferedReader;
+
 /**
  * A class that handles the user's life and keep the score when he looses
  *
@@ -37,10 +49,59 @@ public class HealthAndScore {
 		greenValue = Game.clamp(greenValue, 0, 255);
 
 		greenValue = HEALTH * 2;
-        //check if user has lost so as to upload the score
+        //check if user has lost so as to increase the score by one
 		if (!lost)
 		     score++;
+        //check if user has lost so as to
+		if (end) {
+			int highscore = read();
+		    write(score,highscore);
+		}
 	}
+
+	/**
+	 * Compare the score with the highscore and store the highscore in an external file
+	 *
+	 * @param highscore , the number that is already stored in the external file
+	 * @param score , player's score
+     */
+	public static void write(int highscore , int score) {
+		try {
+			FileOutputStream is = new FileOutputStream("game/highScore.txt");
+			OutputStreamWriter out = new OutputStreamWriter(is);
+			Writer w = new BufferedWriter(out);
+			if (score > highscore){
+			   w.write(score + "");
+		   } else {
+			   w.write(highscore + "");
+			}
+			w.close();
+		} catch (IOException e) {
+			System.err.println("Problem writing to the file highScore.txt");
+		}
+	}
+
+	/**
+	 * Read the highscore from the external file
+     */
+    public static int read(){
+		try{
+			Scanner scanner = new Scanner(new File("game/highScore.txt"));
+			int [] numbers = new int [100];
+			int i = 0;
+			while(scanner.hasNextInt())
+			{
+				 numbers[i++] = scanner.nextInt();
+			}
+			return numbers[0];
+
+		} catch(Exception ex) {
+			System.out.println("Problem reading the file highScore.txt");
+			return -1;
+		}
+
+	}
+
 
 	/**
 	 * Draws the score and the health
@@ -63,9 +124,11 @@ public class HealthAndScore {
 	     if (HEALTH == 0 || end) {
 
 		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 30));
-			g.drawString("Game Over", 280, 180);
+			g.drawString("Game Over", 280, 160);
 		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20));
-			g.drawString("Your score is : " + score, 280, 210);
+			g.drawString("Your score is : " + score, 280, 190);
+		    g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20));
+			g.drawString("Highscore : " + read(), 280, 220);
 
 			lost = true;
 			//we set end true in case user continues to play after game over
