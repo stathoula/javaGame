@@ -39,7 +39,7 @@ public class Window extends Canvas {
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.setLocationRelativeTo(null); //το παράθυρο εμφανίζεται στην μέση, αλλιώς θα έβγαινε πάνω αριστερά
+		frame.setLocationRelativeTo(null); 
 		frame.add(game);//add the game on the frame
 		frame.setVisible(true);
 		game.start();
